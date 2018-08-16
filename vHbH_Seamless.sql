@@ -15,11 +15,15 @@ SELECT
   quantity AS QTY,
   employee_id AS EmployeeID,
   workcenter AS WorkCenter,
+  l.WorkCenterDesc as WorkCenterName,
+  l.DepartmentCode as DepartmentID,
+  l.DepartmentDesc as DepartmentName,
+  l.PlannedCrewSize as PlannedCrew,
   crew_size AS Crew,
   workorder_part AS Part,
   stop_reason as Reason,
   stop_comment as Comment
-FROM finance.dbo.Seamless AS s
+FROM finance.dbo.Seamless AS s left join Finance.dbo.vDimLocation l on l.WorkCenterNum=s.workcenter --adding dimLocation names to increase efficiency
 WHERE (OpsDate >= '2018-01-01')
 AND (DATEDIFF(SECOND, start, stop) > 10) --to eliminate a LOT of useless records
-and workcenter is not null
+and l.WorkCenterNum is not null --to eliminate a LOT of unneeded records
